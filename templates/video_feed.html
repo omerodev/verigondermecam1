@@ -2,9 +2,17 @@
 <html>
 <head>
     <title>Canlı Kamera Görüntüsü</title>
+    <script>
+        function refreshImage() {
+            var img = document.getElementById("live-feed");
+            var timestamp = new Date().getTime();
+            img.src = "{% url 'video_feed' %}?t=" + timestamp;
+        }
+        setInterval(refreshImage, 100);  // 📌 100ms (0.1 saniyede bir) yeni görüntü al
+    </script>
 </head>
 <body>
     <h1>ESP32-CAM Canlı Görüntü</h1>
-    <img src="{% url 'video_feed' %}" width="640" height="480">
+    <img id="live-feed" src="{% url 'video_feed' %}" width="640" height="480">
 </body>
 </html>
