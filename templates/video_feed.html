@@ -1,7 +1,101 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
-    <title>Canlı Kamera Görüntüsü</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ESP32-CAM Canlı Görüntü</title>
+
+    <!-- 📌 Bootstrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- 📌 Özel CSS -->
+    <style>
+        /* 📌 Sayfa Genel Stili */
+        body {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-family: 'Roboto', sans-serif;
+            color: #fff;
+        }
+
+        /* 📌 Canlı Yayın Konteyneri */
+        .camera-container {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            max-width: 700px;
+            width: 100%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .camera-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* 📌 Başlık Stili */
+        h1 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /* 📌 Kamera Görüntüsü */
+        .camera-frame {
+            border-radius: 10px;
+            border: 3px solid #fff;
+            width: 100%;
+            max-width: 640px;
+            height: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 📌 Buton Stili */
+        .btn-refresh {
+            background-color: #ff9800;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            border-radius: 10px;
+            margin-top: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-refresh:hover {
+            background-color: #e68900;
+            transform: scale(1.05);
+        }
+
+        /* 📌 Geri Dön Butonu */
+        .btn-back {
+            display: block;
+            text-decoration: none;
+            font-size: 14px;
+            margin-top: 15px;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-back:hover {
+            background-color: #0056b3;
+            transform: translateY(-3px);
+        }
+    </style>
+
+    <!-- 📌 Canlı Yayını Otomatik Yenileme -->
     <script>
         function refreshImage() {
             var img = document.getElementById("live-feed");
@@ -12,7 +106,15 @@
     </script>
 </head>
 <body>
-    <h1>ESP32-CAM Canlı Görüntü</h1>
-    <img id="live-feed" src="{% url 'video_feed' %}" width="640" height="480">
+
+    <div class="camera-container">
+        <h1>📷 ESP32-CAM Canlı Görüntü</h1>
+        <img id="live-feed" src="{% url 'video_feed' %}" class="camera-frame">
+        <br>
+        <button class="btn-refresh" onclick="refreshImage()">🔄 Yenile</button>
+        <br>
+        <a href="{% url 'home' %}" class="btn-back">🏠 Ana Sayfaya Dön</a>
+    </div>
+
 </body>
 </html>
