@@ -10,7 +10,6 @@
 
     <!-- 📌 Özel CSS -->
     <style>
-        /* 📌 Sayfa Genel Stili */
         body {
             background: linear-gradient(135deg, #6a11cb, #2575fc);
             margin: 0;
@@ -24,7 +23,6 @@
             color: #fff;
         }
 
-        /* 📌 Canlı Yayın Konteyneri */
         .camera-container {
             background: rgba(255, 255, 255, 0.2);
             border-radius: 15px;
@@ -40,14 +38,12 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
 
-        /* 📌 Başlık Stili */
         h1 {
             font-size: 24px;
             font-weight: bold;
             margin-bottom: 20px;
         }
 
-        /* 📌 Kamera Görüntüsü */
         .camera-frame {
             border-radius: 10px;
             border: 3px solid #fff;
@@ -57,7 +53,6 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
-        /* 📌 Buton Stili */
         .btn-refresh {
             background-color: #ff9800;
             border: none;
@@ -76,7 +71,6 @@
             transform: scale(1.05);
         }
 
-        /* 📌 Geri Dön Butonu */
         .btn-back {
             display: block;
             text-decoration: none;
@@ -95,13 +89,19 @@
         }
     </style>
 
-    <!-- 📌 Canlı Yayını Otomatik Yenileme -->
+    <!-- 📌 JavaScript ile Canlı Yayını Güncelleme -->
     <script>
         function refreshImage() {
             var img = document.getElementById("live-feed");
-            var timestamp = new Date().getTime();
-            img.src = "{% url 'video_feed' %}?t=" + timestamp;
+            fetch("{% url 'video_feed' %}", { cache: "reload" })  // Tarayıcı önbelleğini atla
+                .then(response => response.blob())
+                .then(blob => {
+                    var objectURL = URL.createObjectURL(blob);
+                    img.src = objectURL;
+                })
+                .catch(error => console.error("Görüntü güncellenemedi:", error));
         }
+
         setInterval(refreshImage, 100);  // 📌 100ms (0.1 saniyede bir) yeni görüntü al
     </script>
 </head>
@@ -109,7 +109,7 @@
 
     <div class="camera-container">
         <h1>📷 ESP32-CAM Canlı Görüntü</h1>
-        <img id="live-feed" src="{% url 'video_feed' %}" class="camera-frame">
+        <img id="live-feed" class="camera-frame">
         <br>
         <button class="btn-refresh" onclick="refreshImage()">🔄 Yenile</button>
         <br>
